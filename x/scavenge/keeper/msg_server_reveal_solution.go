@@ -38,7 +38,7 @@ func (k msgServer) RevealSolution(goCtx context.Context, msg *types.MsgRevealSol
 
 	_, err := sdk.AccAddressFromBech32(scavenge.Scavenger)
 
-	if err == nil {
+	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Scavenge has already been completed")
 	}
 

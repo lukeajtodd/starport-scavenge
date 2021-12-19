@@ -2,13 +2,13 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
+import { MsgSubmitScavenge } from "./types/scavenge/tx";
 import { MsgCommitSolution } from "./types/scavenge/tx";
 import { MsgRevealSolution } from "./types/scavenge/tx";
-import { MsgSubmitScavenge } from "./types/scavenge/tx";
 const types = [
+    ["/lukeajtodd.scavenge.scavenge.MsgSubmitScavenge", MsgSubmitScavenge],
     ["/lukeajtodd.scavenge.scavenge.MsgCommitSolution", MsgCommitSolution],
     ["/lukeajtodd.scavenge.scavenge.MsgRevealSolution", MsgRevealSolution],
-    ["/lukeajtodd.scavenge.scavenge.MsgSubmitScavenge", MsgSubmitScavenge],
 ];
 export const MissingWalletError = new Error("wallet is required");
 export const registry = new Registry(types);
@@ -29,9 +29,9 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
     const { address } = (await wallet.getAccounts())[0];
     return {
         signAndBroadcast: (msgs, { fee, memo } = { fee: defaultFee, memo: "" }) => client.signAndBroadcast(address, msgs, fee, memo),
+        msgSubmitScavenge: (data) => ({ typeUrl: "/lukeajtodd.scavenge.scavenge.MsgSubmitScavenge", value: MsgSubmitScavenge.fromPartial(data) }),
         msgCommitSolution: (data) => ({ typeUrl: "/lukeajtodd.scavenge.scavenge.MsgCommitSolution", value: MsgCommitSolution.fromPartial(data) }),
         msgRevealSolution: (data) => ({ typeUrl: "/lukeajtodd.scavenge.scavenge.MsgRevealSolution", value: MsgRevealSolution.fromPartial(data) }),
-        msgSubmitScavenge: (data) => ({ typeUrl: "/lukeajtodd.scavenge.scavenge.MsgSubmitScavenge", value: MsgSubmitScavenge.fromPartial(data) }),
     };
 };
 const queryClient = async ({ addr: addr } = { addr: "http://localhost:1317" }) => {

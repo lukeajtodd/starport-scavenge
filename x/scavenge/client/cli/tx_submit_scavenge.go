@@ -16,11 +16,11 @@ var _ = strconv.Itoa(0)
 
 func CmdSubmitScavenge() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "submit-scavenge [solution-hash] [description] [reward]",
+		Use:   "submit-scavenge [solution] [description] [reward]",
 		Short: "Broadcast message submit-scavenge",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			argSolutionHash := args[0]
+			argSolution := args[0]
 			argDescription := args[1]
 			argReward := args[2]
 
@@ -29,7 +29,7 @@ func CmdSubmitScavenge() *cobra.Command {
 				return err
 			}
 
-			solutionHash := sha256.Sum256([]byte(argSolutionHash))
+			solutionHash := sha256.Sum256([]byte(argSolution))
 
 			solutionHashString := hex.EncodeToString(solutionHash[:])
 
