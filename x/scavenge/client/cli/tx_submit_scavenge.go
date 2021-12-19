@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -27,9 +29,13 @@ func CmdSubmitScavenge() *cobra.Command {
 				return err
 			}
 
+			solutionHash := sha256.Sum256([]byte(argSolutionHash))
+
+			solutionHashString := hex.EncodeToString(solutionHash[:])
+
 			msg := types.NewMsgSubmitScavenge(
 				clientCtx.GetFromAddress().String(),
-				argSolutionHash,
+				solutionHashString,
 				argDescription,
 				argReward,
 			)
